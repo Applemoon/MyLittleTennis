@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/sound">
+        <file>Impact.wav</file>
+        <file>WinRound.wav</file>
+        <file>WinGame.wav</file>
+        <file>LoseGame.wav</file>
+        <file>LoseRound.wav</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>0.png</file>
+        <file>2.png</file>
+        <file>3.png</file>
+        <file>4.png</file>
+        <file>5.png</file>
+        <file>6.png</file>
+        <file>7.png</file>
+        <file>8.png</file>
+        <file>9.png</file>
+        <file>colon.png</file>
+        <file>Title.png</file>
+        <file>1.png</file>
+    </qresource>
+</RCC>
