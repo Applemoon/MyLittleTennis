@@ -1,6 +1,5 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QApplication>
 #include <QTimer>
 #include <math.h>
 #include <QSound>

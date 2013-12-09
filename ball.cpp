@@ -1,5 +1,5 @@
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QPen>
+#include <QBrush>
 
 #include "ball.h"
 
@@ -41,5 +41,3 @@ QRectF Ball :: bottomSide()
     return QRectF( pos().x(), pos().y() + boundingRect().height() + 1,
                    boundingRect().width(), 1 );
 }
-
-

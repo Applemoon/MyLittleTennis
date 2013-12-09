@@ -1,6 +1,5 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QGraphicsScene>
 
 #include "platform.h"
 
@@ -20,8 +19,8 @@ QRectF Platform :: boundingRect() const
 
 
 
-void Platform :: paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *)
+void Platform :: paint( QPainter *painter, const QStyleOptionGraphicsItem *option,
+                       QWidget * )
 {
     painter->setClipRect( option->exposedRect );
     painter->setBrush( Qt::white );

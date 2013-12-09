@@ -2,7 +2,6 @@
 #define SCENE_H
 
 #include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
 
 #include "enemy.h"
 #include "ball.h"
@@ -17,7 +16,6 @@ public:
 
 private:
     enum Dir { Top, Bottom, Left, Right };
-    //enum State { Title, MainMenu, Game };
 
     void newRound(); // новая игра
     void keyPressEvent(QKeyEvent *event);
@@ -30,6 +28,7 @@ private:
     void updateScore( Platform *platform = NULL ); // обвновление счета в массиве
     void drawScore( Platform *platform = NULL ); // отрисовка счета
 
+    //enum State { Title, MainMenu, Game };
     //State state;
 
     Platform *player;
