@@ -41,3 +41,32 @@ QRectF Ball :: bottomSide()
     return QRectF( pos().x(), pos().y() + boundingRect().height() + 1,
                    boundingRect().width(), 1 );
 }
+
+
+
+void Ball :: launch()
+{
+    if ( !launched )
+    {
+        int tempVX = 15.0;
+        int tempVY = 10.0;
+
+        const bool left = qrand() % 2;
+        if ( left ) tempVX *= -1;
+
+        const bool up = qrand() % 2;
+        if ( up ) tempVY *= -1;
+
+        setVX( tempVX );
+        setVY( tempVY );
+
+        launched = true;
+    }
+}
+
+
+
+void Ball :: move()
+{
+    setPos( pos().x() + vx, pos().y() + vy );
+}

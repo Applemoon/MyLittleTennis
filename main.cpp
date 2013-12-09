@@ -1,3 +1,9 @@
+/*-------------------------------------------------------
+My Little Tennis
+Ver. 0.1.1
+Applemoon. No rights reserved.
+-------------------------------------------------------*/
+
 #include <QApplication>
 #include <QGraphicsView>
 #include <QDesktopWidget>
@@ -11,7 +17,6 @@
 int main( int argc, char** argv )
 {
     QApplication app( argc, argv );
-    QApplication::setOverrideCursor( Qt::BlankCursor );
 
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -29,13 +34,12 @@ int main( int argc, char** argv )
     view.showFullScreen();
 
     const int result = app.exec();
-    QApplication::restoreOverrideCursor();
     return result;
 }
 
 /*
  *ФИЧИ
- *-сделать титульник
+ *-исправить положение платформы после титульника
  *-сделать главное меню
  *-добавить музыку
  */

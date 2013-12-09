@@ -15,7 +15,13 @@ public:
     explicit Scene(const QRectF & sceneRect, QObject * parent = 0);
 
 private:
-    enum Dir { Top, Bottom, Left, Right };
+    //enum Dir { Top, Bottom, Left, Right };
+    enum State { Title, MainMenu, Game };
+
+    void clearScene();
+    void initializeTitle();
+    void initializeMenu();
+    void initializeGame();
 
     void newRound(); // новая игра
     void keyPressEvent(QKeyEvent *event);
@@ -28,14 +34,17 @@ private:
     void updateScore( Platform *platform = NULL ); // обвновление счета в массиве
     void drawScore( Platform *platform = NULL ); // отрисовка счета
 
-    //enum State { Title, MainMenu, Game };
-    //State state;
+    State state;
+
+    QGraphicsPixmapItem *titlePixmap;
+    qreal titlePixmapScale;
+    uint titleAnimationStep;
+    uint borderStep;
 
     Platform *player;
     Enemy *enemy;
     Ball *ball;
 
-    bool ballLaunched;
     qreal fps;
     qreal speedMultiplier;
 
@@ -45,9 +54,6 @@ private:
     QVector< QGraphicsPixmapItem * > playerPixmaps;
     QGraphicsPixmapItem *colonPixmap;
     QVector< QGraphicsPixmapItem * > enemyPixmaps;
-
-private slots:
-    void launchBall();
 };
 
 #endif // SCENE_H
