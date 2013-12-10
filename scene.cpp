@@ -14,6 +14,8 @@ Scene :: Scene( const QRectF& sceneRect, QObject* parent ) :
     winScore( 10 ), playerScore( 0 ), enemyScore( 0 )
 {
     setBackgroundBrush( Qt::black );
+    connect( newGameBtn, SIGNAL( pressed() ), SLOT( initializeGame() ) );
+    connect( exitGameBtn, SIGNAL( pressed() ), SLOT( exit() ) );
     startTimer( 1000 / fps, Qt::PreciseTimer );
     initializeTitle();
 }
@@ -50,6 +52,14 @@ void Scene :: initializeMenu()
 {
     clearScene();
     state = MainMenu;
+    
+    newGameBtn = new MenuButton( ":/images/Resources/NewGame.png" );
+    addPixmap( newGameBtn );
+    newGameBtn->setPos( width()/20, height()/2 );
+    
+    exitBtn = new MenuButton( ":/images/Resources/ExitGame.png" );
+    addPixmap( newGameBtn );
+    exitBtn->setPos( width()/20, newGameBtn->pos().y() + newGameBtn->boundingRect().height()*1.3 );
 
     QApplication::restoreOverrideCursor();
 }
@@ -108,20 +118,36 @@ void Scene :: newRound()
 
 void Scene :: keyPressEvent(QKeyEvent *event)
 {
-    if ( event->key() == Qt::Key_Escape )
+    switch ( state )
     {
-        exit( 0 );
-        /*TO TEMP MENU*/
+    case Title:
+    {
+        if ( event->key() == Qt::Key_Space || event->key() == Qt::Key_Escape )
+        {
+            initializeMenu();
+        }
+        break;
     }
-
-    if ( state == Game && event->key() == Qt::Key_R )
+    case MainMenu:
     {
-        newRound();
+        if ( event->key() == Qt::Key_Escape )
+        {
+            exit( 0 );
+        }
+        break;
     }
-
-    if ( state == Title && event->key() == Qt::Key_Space )
+    case Game:
     {
-        initializeGame();
+        if ( event->key() == Qt::Key_Escape )
+        {
+            initializeMenu();
+        }
+        else if ( event->key() == Qt::Key_R )
+        {
+            newRound();
+        }
+        break;
+    }
     }
 }
 
@@ -186,7 +212,7 @@ void Scene :: timerEvent(QTimerEvent *)
         }
         else
         {
-            initializeGame(); /*TODO*/
+            initializeMenu();
         }
 
         ++titleAnimationStep;

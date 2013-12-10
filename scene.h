@@ -5,6 +5,7 @@
 
 #include "enemy.h"
 #include "ball.h"
+#include "menuButton.h"
 
 
 
@@ -15,14 +16,16 @@ public:
     explicit Scene(const QRectF & sceneRect, QObject * parent = 0);
 
 private:
-    //enum Dir { Top, Bottom, Left, Right };
     enum State { Title, MainMenu, Game };
 
     void clearScene();
     void initializeTitle();
     void initializeMenu();
+    
+private slots:
     void initializeGame();
-
+    
+private:
     void newRound(); // новая игра
     void keyPressEvent(QKeyEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -35,19 +38,25 @@ private:
     void drawScore( Platform *platform = NULL ); // отрисовка счета
 
     State state;
+    qreal fps;
 
+    // титульник
     QGraphicsPixmapItem *titlePixmap;
     qreal titlePixmapScale;
     uint titleAnimationStep;
     uint borderStep;
 
+    // главное меню
+    MenuButton *newGameBtn;
+    MenuButton *exitBtn;
+    
+    // игровые объекты
     Platform *player;
     Enemy *enemy;
     Ball *ball;
-
-    qreal fps;
     qreal speedMultiplier;
 
+    // табло счета
     ushort winScore;
     ushort playerScore;
     ushort enemyScore;
