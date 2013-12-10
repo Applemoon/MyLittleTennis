@@ -20,5 +20,9 @@
         <file>Resources/colon.png</file>
         <file>Resources/Empty.png</file>
         <file>Resources/Title.png</file>
+        <file>Resources/ExitGame.png</file>
+        <file>Resources/ExitGameHovered.png</file>
+        <file>Resources/NewGame.png</file>
+        <file>Resources/NewGameHovered.png</file>
     </qresource>
 </RCC>

@@ -14,8 +14,6 @@ Scene :: Scene( const QRectF& sceneRect, QObject* parent ) :
     winScore( 10 ), playerScore( 0 ), enemyScore( 0 )
 {
     setBackgroundBrush( Qt::black );
-    connect( newGameBtn, SIGNAL( pressed() ), SLOT( initializeGame() ) );
-    connect( exitGameBtn, SIGNAL( pressed() ), SLOT( exit() ) );
     startTimer( 1000 / fps, Qt::PreciseTimer );
     initializeTitle();
 }
@@ -27,6 +25,7 @@ void Scene :: clearScene()
     foreach ( QGraphicsItem* item, items() )
     {
         removeItem( item );
+        delete item;
     }
 }
 
@@ -54,12 +53,14 @@ void Scene :: initializeMenu()
     state = MainMenu;
     
     newGameBtn = new MenuButton( ":/images/Resources/NewGame.png" );
-    addPixmap( newGameBtn );
+    addItem( newGameBtn );
     newGameBtn->setPos( width()/20, height()/2 );
+    connect( newGameBtn, SIGNAL( pressed() ), SLOT( initializeGame() ) );
     
     exitBtn = new MenuButton( ":/images/Resources/ExitGame.png" );
-    addPixmap( newGameBtn );
+    addItem( exitBtn );
     exitBtn->setPos( width()/20, newGameBtn->pos().y() + newGameBtn->boundingRect().height()*1.3 );
+    connect( exitBtn, SIGNAL( pressed() ), SIGNAL( wannaClose() ) );
 
     QApplication::restoreOverrideCursor();
 }
@@ -71,7 +72,7 @@ void Scene :: initializeGame()
     clearScene();
     state = Game;
 
-    QApplication::setOverrideCursor( Qt::BlankCursor );
+    //QApplication::setOverrideCursor( Qt::BlankCursor );
 
     player = new Platform( width(), height() );
     addItem( player );
@@ -141,6 +142,7 @@ void Scene :: keyPressEvent(QKeyEvent *event)
         if ( event->key() == Qt::Key_Escape )
         {
             initializeMenu();
+            return;
         }
         else if ( event->key() == Qt::Key_R )
         {
@@ -153,7 +155,7 @@ void Scene :: keyPressEvent(QKeyEvent *event)
 
 
 
-void Scene :: mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Scene :: mouseMoveEvent( QGraphicsSceneMouseEvent *event )
 {
     switch ( state )
     {
@@ -163,6 +165,28 @@ void Scene :: mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     case MainMenu:
     {
+        if ( itemAt( event->scenePos(), QTransform() ) == newGameBtn )
+        {
+            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGameHovered.png" ) );
+            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGame.png" ) );
+            newGameBtn->mouseOver( true );
+            exitBtn->mouseOver( false );
+        }
+        else if ( itemAt( event->scenePos(), QTransform() ) == exitBtn )
+        {
+            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGameHovered.png" ) );
+            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGame.png" ) );
+            newGameBtn->mouseOver( false );
+            exitBtn->mouseOver( true );
+        }
+        else
+        {
+            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGame.png" ) );
+            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGame.png" ) );
+            newGameBtn->mouseOver( false );
+            exitBtn->mouseOver( false );
+        }
+
         break;
     }
     case Game:
@@ -213,6 +237,7 @@ void Scene :: timerEvent(QTimerEvent *)
         else
         {
             initializeMenu();
+            return;
         }
 
         ++titleAnimationStep;

@@ -15,6 +15,9 @@ class Scene : public QGraphicsScene
 public:
     explicit Scene(const QRectF & sceneRect, QObject * parent = 0);
 
+signals:
+    void wannaClose();
+
 private:
     enum State { Title, MainMenu, Game };
 
@@ -27,9 +30,9 @@ private slots:
     
 private:
     void newRound(); // новая игра
-    void keyPressEvent(QKeyEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void timerEvent(QTimerEvent *); // событие такта таймера
+    void keyPressEvent( QKeyEvent *event );
+    void mouseMoveEvent( QGraphicsSceneMouseEvent *event );
+    void timerEvent( QTimerEvent * ); // событие такта таймера
     void checkImpact(); // проверка столкновения
     void checkBall(); // проверка вылета за границы
     void handleImpact( Platform *platform ); // обработка столкновения

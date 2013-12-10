@@ -1,30 +1,27 @@
-#inlude "menuButton.h"
+#include "menuButton.h"
 
 
 
-MenuButton( QString pixName, QGraphicsItem * parent ) : QGraphicsItem ( parent ), 
-    pixmapName( pixName ), pixmapNameHovered( pixmapName + QString( "Hovered" )
+MenuButton :: MenuButton( QString pixName, QGraphicsItem * parent ) :
+    QGraphicsPixmapItem ( parent ), pixmapName( pixName ),
+    pixmapNameHovered( pixName )
 {
+    pixmapNameHovered.insert( pixmapNameHovered.lastIndexOf( "." ), "Hovered" );
     setPixmap( QPixmap( pixmapName ) );
 }
 
 
 
-void MenuButton :: hoverEnterEvent ( QGraphicsSceneHoverEvent * event )
-{
-    setPixmap( QPixmap( pixmapNameHovered ) );
-}
-
-
-
-void MenuButton :: hoverLeaveEvent ( QGraphicsSceneHoverEvent * event )
-{
-    setPixmap( QPixmap( pixmapName ) );
-}
-
-
-
-void MenuButton :: mousePressEvent ( QGraphicsSceneMouseEvent * event )
+void MenuButton :: mousePressEvent( QGraphicsSceneMouseEvent * )
 {
     emit pressed();
+}
+
+
+
+void MenuButton :: mouseOver( bool mo )
+{
+    mo ? setPixmap( QPixmap( pixmapNameHovered ) )
+       : setPixmap( QPixmap( pixmapName ) );
+    update(); /**/
 }

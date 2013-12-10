@@ -5,13 +5,15 @@ SOURCES += \
     scene.cpp \
     platform.cpp \
     enemy.cpp \
-    ball.cpp
+    ball.cpp \
+    menuButton.cpp
 
 HEADERS += \
     scene.h \
     platform.h \
     enemy.h \
-    ball.h
+    ball.h \
+    menuButton.h
 
 RESOURCES += \
     resources.qrc
