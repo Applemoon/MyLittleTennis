@@ -5,6 +5,7 @@
 
 #include "enemy.h"
 #include "ball.h"
+#include "menuButton.h"
 
 
 
@@ -13,14 +14,26 @@ class Scene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit Scene(const QRectF & sceneRect, QObject * parent = 0);
+    ~Scene();
+
+signals:
+    void wannaClose();
 
 private:
-    enum Dir { Top, Bottom, Left, Right };
+    enum State { Title, MainMenu, Game };
 
+    void clearScene();
+    void initializeTitle();
+    void initializeMenu();
+    
+private slots:
+    void initializeGame();
+    
+private:
     void newRound(); // новая игра
-    void keyPressEvent(QKeyEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void timerEvent(QTimerEvent *); // событие такта таймера
+    void keyPressEvent( QKeyEvent *event );
+    void mouseMoveEvent( QGraphicsSceneMouseEvent *event );
+    void timerEvent( QTimerEvent * ); // событие такта таймера
     void checkImpact(); // проверка столкновения
     void checkBall(); // проверка вылета за границы
     void handleImpact( Platform *platform ); // обработка столкновения
@@ -28,26 +41,32 @@ private:
     void updateScore( Platform *platform = NULL ); // обвновление счета в массиве
     void drawScore( Platform *platform = NULL ); // отрисовка счета
 
-    //enum State { Title, MainMenu, Game };
-    //State state;
+    State state;
+    qreal fps;
 
+    // титульник
+    QGraphicsPixmapItem *titlePixmap;
+    qreal titlePixmapScale;
+    uint titleAnimationStep;
+    uint borderStep;
+
+    // главное меню
+    MenuButton *newGameBtn;
+    MenuButton *exitBtn;
+    
+    // игровые объекты
     Platform *player;
     Enemy *enemy;
     Ball *ball;
-
-    bool ballLaunched;
-    qreal fps;
     qreal speedMultiplier;
 
+    // табло счета
     ushort winScore;
     ushort playerScore;
     ushort enemyScore;
     QVector< QGraphicsPixmapItem * > playerPixmaps;
     QGraphicsPixmapItem *colonPixmap;
     QVector< QGraphicsPixmapItem * > enemyPixmaps;
-
-private slots:
-    void launchBall();
 };
 
 #endif // SCENE_H
