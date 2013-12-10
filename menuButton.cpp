@@ -23,5 +23,4 @@ void MenuButton :: mouseOver( bool mo )
 {
     mo ? setPixmap( QPixmap( pixmapNameHovered ) )
        : setPixmap( QPixmap( pixmapName ) );
-    update(); /**/
 }

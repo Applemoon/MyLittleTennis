@@ -1,6 +1,6 @@
 /*-------------------------------------------------------
 My Little Tennis
-Ver. 0.2.1
+Ver. 0.2.2
 Applemoon. No rights reserved.
 -------------------------------------------------------*/
 
@@ -19,12 +19,10 @@ int main( int argc, char** argv )
     QApplication app( argc, argv );
 
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
-    QRect screenRect( 0, 0, QApplication::desktop()->screenGeometry().width(),
-                                QApplication::desktop()->screenGeometry().height() );
-    Scene scene( screenRect );
+    Scene scene( QApplication::desktop()->screenGeometry() );
 
     QGraphicsView view( &scene );
+    view.setFrameShape( QFrame::NoFrame );
     view.setMouseTracking( true );
     view.setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     view.setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -33,6 +31,5 @@ int main( int argc, char** argv )
 
     view.showFullScreen();
 
-    const int result = app.exec();
-    return result;
+    return app.exec();
 }

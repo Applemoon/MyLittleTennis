@@ -14,6 +14,7 @@ class Scene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit Scene(const QRectF & sceneRect, QObject * parent = 0);
+    ~Scene();
 
 signals:
     void wannaClose();

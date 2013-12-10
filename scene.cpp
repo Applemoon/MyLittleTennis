@@ -10,22 +10,51 @@
 
 
 Scene :: Scene( const QRectF& sceneRect, QObject* parent ) :
-    QGraphicsScene( sceneRect, parent ), fps( 60 ), speedMultiplier( 1 ),
+    QGraphicsScene( sceneRect, parent ), fps( 100 ), speedMultiplier( 1 ),
     winScore( 10 ), playerScore( 0 ), enemyScore( 0 )
 {
     setBackgroundBrush( Qt::black );
+
+    titlePixmap = new QGraphicsPixmapItem( QPixmap( QString( ":/images/Resources/Title.png" ) ) );
+    newGameBtn = new MenuButton( ":/images/Resources/NewGame.png" );
+    exitBtn = new MenuButton( ":/images/Resources/ExitGame.png" );
+    player = new Platform( width(), height() );
+    enemy = new Enemy(  width(), height() );
+    ball = new Ball( 0, 0, width()/63, width()/63 );
+    playerPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    playerPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    playerPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    colonPixmap = new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/colon.png" ) ) );
+    enemyPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    enemyPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    enemyPixmaps.push_back( new QGraphicsPixmapItem( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+
     startTimer( 1000 / fps, Qt::PreciseTimer );
     initializeTitle();
 }
 
 
 
+Scene :: ~Scene()
+{
+    delete titlePixmap;
+    delete newGameBtn;
+    delete exitBtn;
+    delete player;
+    delete enemy;
+    delete ball;
+    playerPixmaps.clear();
+    delete colonPixmap;
+    enemyPixmaps.clear();
+}
+
+
+
 void Scene :: clearScene()
 {
-    foreach ( QGraphicsItem* item, items() )
+    foreach ( QGraphicsItem *item, items() )
     {
         removeItem( item );
-        delete item;
     }
 }
 
@@ -36,7 +65,7 @@ void Scene :: initializeTitle()
     clearScene();
     state = Title;
 
-    titlePixmap = addPixmap( QPixmap( QString( ":/images/Resources/Title.png" ) ) );
+    addItem( titlePixmap );
     titlePixmap->setPos( ( width() - titlePixmap->boundingRect().width() )/2,
                          ( height() - titlePixmap->boundingRect().height() )/2 );
 
@@ -51,18 +80,16 @@ void Scene :: initializeMenu()
 {
     clearScene();
     state = MainMenu;
-    
-    newGameBtn = new MenuButton( ":/images/Resources/NewGame.png" );
+
+    QApplication::setOverrideCursor( Qt::ArrowCursor );
+
     addItem( newGameBtn );
     newGameBtn->setPos( width()/20, height()/2 );
     connect( newGameBtn, SIGNAL( pressed() ), SLOT( initializeGame() ) );
-    
-    exitBtn = new MenuButton( ":/images/Resources/ExitGame.png" );
+
     addItem( exitBtn );
     exitBtn->setPos( width()/20, newGameBtn->pos().y() + newGameBtn->boundingRect().height()*1.3 );
     connect( exitBtn, SIGNAL( pressed() ), SIGNAL( wannaClose() ) );
-
-    QApplication::restoreOverrideCursor();
 }
 
 
@@ -72,35 +99,32 @@ void Scene :: initializeGame()
     clearScene();
     state = Game;
 
-    //QApplication::setOverrideCursor( Qt::BlankCursor );
+    QApplication::setOverrideCursor( Qt::BlankCursor );
 
-    player = new Platform( width(), height() );
     addItem( player );
-    player->setPos( width()/40, player->getHeight()/2 );
+    player->setPos( width()/40, height()/2 );
 
-    enemy = new Enemy(  width(), height() );
     addItem( enemy );
     enemy->setPos( width() - player->x(), height()/2 );
 
-    ball = new Ball( 0, 0, width()/63, width()/63 );
     addItem( ball );
     ball->setLaunched( false );
 
-    playerPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
-    playerPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
-    playerPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
-    colonPixmap = addPixmap( QPixmap( QString ( ":/images/Resources/colon.png" ) ) );
-    enemyPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
-    enemyPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
-    enemyPixmaps.push_back( addPixmap( QPixmap( QString ( ":/images/Resources/Empty.png" ) ) ) );
+    foreach ( QGraphicsPixmapItem* item, playerPixmaps )
+    {
+        addItem( item );
+    }
+    addItem( colonPixmap );
+    foreach ( QGraphicsPixmapItem* item, enemyPixmaps )
+    {
+        addItem( item );
+    }
 
     updateScore( player );
     updateScore();
     updateScore( enemy );
 
     newRound();
-
-    startTimer( 1000 / fps, Qt::PreciseTimer );
 }
 
 
@@ -165,27 +189,8 @@ void Scene :: mouseMoveEvent( QGraphicsSceneMouseEvent *event )
     }
     case MainMenu:
     {
-        if ( itemAt( event->scenePos(), QTransform() ) == newGameBtn )
-        {
-            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGameHovered.png" ) );
-            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGame.png" ) );
-            newGameBtn->mouseOver( true );
-            exitBtn->mouseOver( false );
-        }
-        else if ( itemAt( event->scenePos(), QTransform() ) == exitBtn )
-        {
-            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGameHovered.png" ) );
-            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGame.png" ) );
-            newGameBtn->mouseOver( false );
-            exitBtn->mouseOver( true );
-        }
-        else
-        {
-            //newGameBtn->setPixmap( QPixmap( ":/images/Resources/NewGame.png" ) );
-            //exitBtn->setPixmap( QPixmap( ":/images/Resources/ExitGame.png" ) );
-            newGameBtn->mouseOver( false );
-            exitBtn->mouseOver( false );
-        }
+        newGameBtn->mouseOver( itemAt( event->scenePos(), QTransform() ) == newGameBtn );
+        exitBtn->mouseOver( itemAt( event->scenePos(), QTransform() ) == exitBtn );
 
         break;
     }
