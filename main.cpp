@@ -36,10 +36,3 @@ int main( int argc, char** argv )
     const int result = app.exec();
     return result;
 }
-
-/*
- *ФИЧИ
- *-исправить положение платформы после титульника
- *-сделать главное меню
- *-добавить музыку
- */
