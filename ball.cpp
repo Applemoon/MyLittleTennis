@@ -1,5 +1,6 @@
 #include <QPen>
 #include <QBrush>
+#include <math.h>
 
 #include "ball.h"
 
@@ -48,14 +49,11 @@ void Ball :: launch()
 {
     if ( !launched )
     {
-        int tempVX = 15.0;
-        int tempVY = 10.0;
+        qreal tempVX = 20.0;
+        qreal tempVY = 7.0;
 
-        const bool left = qrand() % 2;
-        if ( left ) tempVX *= -1;
-
-        const bool up = qrand() % 2;
-        if ( up ) tempVY *= -1;
+        if ( qrand() % 2 ) tempVX *= -1;
+        if ( qrand() % 2 ) tempVY *= -1;
 
         setVX( tempVX );
         setVY( tempVY );

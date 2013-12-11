@@ -372,7 +372,7 @@ void Scene :: handleImpact( Platform *platform )
     ball->setVX( vxAfter );
     ball->setVY( vyAfter );
 
-    speedMultiplier *= 1.02;
+    speedMultiplier *= 1.015;
     ball->setVX( ball->getVX() * speedMultiplier );
     ball->setVY( ball->getVY() * speedMultiplier );
 }
@@ -479,8 +479,9 @@ void Scene :: drawScore( Platform *platform )
         {
             playerPixmaps[i]->setScale( scorePixmapWidth /
                                         playerPixmaps[i]->boundingRect().width() );
-            playerPixmaps[i]->setPos( width()/2 - scorePixmapWidth*( 0.5 +
-                                                                     playerPixmaps.size() - i ), height()/20 );
+            playerPixmaps[i]->setPos( width()/2 - scorePixmapWidth*
+                                      ( 0.5 + playerPixmaps.size()*1.3 - i*1.3 ),
+                                      height()/20 );
         }
     }
     else if ( platform == enemy )
@@ -490,7 +491,7 @@ void Scene :: drawScore( Platform *platform )
         {
             enemyPixmaps[i]->setScale( scorePixmapWidth /
                                        enemyPixmaps[i]->boundingRect().width() );
-            enemyPixmaps[i]->setPos( width()/2 + scorePixmapWidth*( 0.5 + i ),
+            enemyPixmaps[i]->setPos( width()/2 + scorePixmapWidth*( 0.5 + i*1.3 ),
                                      height()/20 );
         }
     }
