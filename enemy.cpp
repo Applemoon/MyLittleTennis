@@ -15,7 +15,7 @@ void Enemy :: thinkNMove( const Ball *ball , const Platform *player )
 {
     // скорость вниз - положительная, вверх - отрицательная
 
-    const qreal maxV = 15.0;
+    const qreal maxV = 25.0;
     //const qreal maxAccel = 2.0;
 
     // движемся за мячом
